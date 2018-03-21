@@ -114,6 +114,26 @@ Choroplethlegend.onAdd = function (map) {
 
 Choroplethlegend.addTo(map);
 
+// Second Layer section
+// ---------------------
+
+// Control that Shows DU Info on Hover
+var info2 = L.control();
+
+info2.onAdd = function (map2) {
+  this._div = L.DomUtil.create('div', 'info DU');
+  this.update();
+  return this._div;
+};
+
+info2.update = function (props) {
+  this._div.innerHTML = '<h4>New Residential Dwelling Units <br> Created in Last 15 Years</h4>' +
+  (props ? '<b>Census Tract ' + props.CTLabel + '</b><br>' + props.Res_Units + ' Dwelling Units'
+    : 'Hover Over a Census Tract');
+};
+
+info2.addTo(map);
+
 // Creating Second Choropleth Map New Residential DUs
 function getColor2(Res_Units) {
   console.log(Res_Units)
@@ -151,14 +171,14 @@ function highlightFeature2(e) {
 		// 	layer.bringToFront();
 		// }
 
-		info.update(layer.feature.properties);
+		info2.update(layer.feature.properties);
 	}
 
 var DUsLayer;
 
 function resetHighlight2(e) {
 	DUsLayer.resetStyle(e.target);
-	info.update();
+	info2.update();
 }
 
 function zoomToFeature2(e) {
@@ -178,24 +198,6 @@ DUsLayer = L.geoJson(StudyAreaCensusTracts, {
 		onEachFeature: onEachFeature
 })
 
-// Control that Shows DU Info on Hover
-var info2 = L.control();
-
-info2.onAdd = function (map2) {
-  this._div = L.DomUtil.create('div', 'info DU');
-  this.update();
-  return this._div;
-};
-
-info2.update = function (props) {
-  this._div.innerHTML = '<h4>New Residential Dwelling Units <br> Created in Last 15 Years</h4>' +
-  (props ? '<b>' + 'Census Tract' + " " + props.CTLabel + '</b><br />' + props.Res_Units + 'Dwelling Units'
-    : 'Hover Over a Census Tract');
-    console.log(this)
-    return this;
-};
-
-info2.addTo(map);
 
 // Second Choropleth Legend
 var Choroplethlegend2 = L.control({position: 'bottomright'});
